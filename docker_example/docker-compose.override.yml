@@ -1,0 +1,20 @@
+# 로컬 개발용 override — docker compose가 docker-compose.yml과 자동 병합한다.
+#
+# 목적: hwp_parser 컨테이너와 같은 네트워크(agentx-net)에 연결
+#   → HWP Parser 노드의 api_url 을 http://hwp_parser:8000 으로 사용 가능
+#
+# HWP 컴포넌트는 이제 lfx-sapieparser 번들(wheel)로 설치한다:
+#   ~/project/hwpparser/langflow-bundle/README.md 참고.
+#   (임시: docker exec <컨테이너> pip install <wheel> 후 restart.
+#    영구: README의 커스텀 Dockerfile로 이미지 빌드.)
+#
+# 사전 조건: `docker network create agentx-net` + hwpparser 프로젝트의 컨테이너 기동
+services:
+  langflow:
+    networks:
+      - default
+      - agentx-net
+
+networks:
+  agentx-net:
+    external: true
